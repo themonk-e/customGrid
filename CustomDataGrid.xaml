@@ -1,0 +1,181 @@
+<UserControl x:Class="CustomGridControl.CustomDataGrid"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:CustomGridControl"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <local:CellStateToBackgroundConverter x:Key="CellStateToBackgroundConverter"/>
+        <local:CellStateToVisibilityConverter x:Key="CellStateToVisibilityConverter"/>
+        
+        <Style x:Key="OldValueStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="Gray"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CellState}" Value="Pending">
+                    <Setter Property="TextDecorations" Value="Strikethrough"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding CellState}" Value="Accepted">
+                    <Setter Property="TextDecorations" Value="Strikethrough"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding CellState}" Value="Rejected">
+                    <Setter Property="TextDecorations" Value="None"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        
+        <Style x:Key="NewValueStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="TextDecorations" Value="None"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CellState}" Value="Rejected">
+                    <Setter Property="TextDecorations" Value="Strikethrough"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding CellState}" Value="Accepted">
+                    <Setter Property="Foreground" Value="Black"/>
+                    <Setter Property="TextDecorations" Value="None"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        
+        <Style x:Key="RoundedButton" TargetType="Button">
+            <Setter Property="Width" Value="24"/>
+            <Setter Property="Height" Value="24"/>
+            <Setter Property="Margin" Value="1"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="12"
+                                BorderThickness="1"
+                                BorderBrush="#E0E0E0">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.8"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity" Value="0.6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <DataTemplate x:Key="CustomCellTemplate">
+            <Border Background="{Binding CellState, Converter={StaticResource CellStateToBackgroundConverter}}"
+                    BorderBrush="LightGray" BorderThickness="1" Padding="5">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" 
+                               Text="{Binding OldValue}" 
+                               Style="{StaticResource OldValueStyle}"
+                               Margin="2"/>
+                    
+                    <TextBlock Grid.Row="1" Grid.Column="0" 
+                               Text="{Binding NewValue}" 
+                               Style="{StaticResource NewValueStyle}"
+                               Margin="2"/>
+
+                    <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" 
+                                Orientation="Horizontal" HorizontalAlignment="Right"
+                                Margin="2">
+                        <Button Name="AcceptButton" Content="✓" 
+                                Style="{StaticResource RoundedButton}"
+                                Background="#4CAF50" 
+                                Foreground="White"
+                                Click="AcceptButton_Click"
+                                Tag="{Binding}">
+                            <Button.Visibility>
+                                <Binding Path="CellState" Converter="{StaticResource CellStateToVisibilityConverter}" ConverterParameter="ShowTick"/>
+                            </Button.Visibility>
+                        </Button>
+                        <Button Name="RejectButton" Content="✗" 
+                                Style="{StaticResource RoundedButton}"
+                                Background="#F44336" 
+                                Foreground="White"
+                                Click="RejectButton_Click"
+                                Tag="{Binding}">
+                            <Button.Visibility>
+                                <Binding Path="CellState" Converter="{StaticResource CellStateToVisibilityConverter}" ConverterParameter="ShowX"/>
+                            </Button.Visibility>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <DataGrid Name="MainDataGrid" 
+              ItemsSource="{Binding GridData}" 
+              AutoGenerateColumns="False"
+              CanUserAddRows="False"
+              CanUserDeleteRows="False"
+              GridLinesVisibility="All"
+              HeadersVisibility="Column">
+        <DataGrid.Columns>
+            <DataGridTemplateColumn Header="Name" Width="200">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <ContentPresenter Content="{Binding Name}" 
+                                          ContentTemplate="{StaticResource CustomCellTemplate}"/>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+            
+            <DataGridTemplateColumn Header="Email" Width="250">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <ContentPresenter Content="{Binding Email}" 
+                                          ContentTemplate="{StaticResource CustomCellTemplate}"/>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+            
+            <DataGridTemplateColumn Header="Address" Width="250">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <ContentPresenter Content="{Binding Address}" 
+                                          ContentTemplate="{StaticResource CustomCellTemplate}"/>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+            
+            <DataGridTemplateColumn Header="Phone" Width="150">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <ContentPresenter Content="{Binding Phone}" 
+                                          ContentTemplate="{StaticResource CustomCellTemplate}"/>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+            
+            <DataGridTemplateColumn Header="Position" Width="200">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <ContentPresenter Content="{Binding Position}" 
+                                          ContentTemplate="{StaticResource CustomCellTemplate}"/>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+        </DataGrid.Columns>
+    </DataGrid>
+</UserControl>

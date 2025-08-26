@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Telerik.UI.for.Wpf.80</id>
+    <version>2024.4.1213</version>
+    <title>Telerik UI for WPF80 (NoXaml)</title>
+    <authors>Progress</authors>
+    <owners>Progress</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="file">LicenseAgreements\EULA.txt</license>
+    <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
+    <icon>images\wpf.png</icon>
+    <projectUrl>http://www.telerik.com/products/wpf/overview.aspx</projectUrl>
+    <iconUrl>http://www.telerik.com/docs/default-source/nuget-feed-product-files/nugeticon_wpf.png?sfvrsn=2</iconUrl>
+    <description>UI for WPF is an enterprise-ready development suite of over 160+ UI controls for creating engaging, interactive user experiences for Windows desktop applications. This package contains NoXaml version of the assemblies.</description>
+    <language>en-US</language>
+    <dependencies>
+      <dependency id="SharpDX" version="4.2.0" />
+      <dependency id="SharpDX.Direct2D1" version="4.2.0" />
+      <dependency id="SharpDX.Direct3D10" version="4.2.0" />
+      <dependency id="SharpDX.Direct3D9" version="4.2.0" />
+      <dependency id="SharpDX.DXGI" version="4.2.0" />
+      <dependency id="SharpDX.Mathematics" version="4.2.0" />
+      <dependency id="System.Net.Http" version="4.3.4" />
+      <dependency id="System.Text.RegularExpressions" version="4.3.1" />
+      <dependency id="Microsoft.EntityFrameworkCore" version="8.0.8" />
+      <dependency id="Microsoft.Extensions.Caching.Memory" version="8.0.1" />
+      <dependency id="Microsoft.OData.Client" version="7.8.3" />
+      <dependency id="System.Data.OleDb" version="7.0.0" />
+      <dependency id="System.Drawing.Common" version="8.0.10" />
+      <dependency id="System.ServiceModel.Http" version="6.2.0" />
+      <dependency id="System.Security.Cryptography.Pkcs" version="6.0.4" />
+      <dependency id="System.Formats.Asn1" version="6.0.1" />
+      <dependency id="SkiaSharp" version="2.88.6" />
+    </dependencies>
+    <references>
+      <reference file="MediaFoundation.dll" />
+      <reference file="Telerik.Pivot.Core.dll" />
+      <reference file="Telerik.Pivot.DataProviders.Adomd.dll" />
+      <reference file="Telerik.Pivot.DataProviders.Queryable.dll" />
+      <reference file="Telerik.Pivot.DataProviders.Xmla.dll" />
+      <reference file="Telerik.Windows.Cloud.dll" />
+      <reference file="Telerik.Windows.Cloud.Controls.dll" />
+      <reference file="Telerik.Windows.Controls.Chart.dll" />
+      <reference file="Telerik.Windows.Controls.Chart.Skia.dll" />
+      <reference file="Telerik.Windows.Controls.Chart.Direct2D.dll" />
+      <reference file="Telerik.Windows.Controls.ConversationalUI.dll" />
+      <reference file="Telerik.Windows.Controls.Data.dll" />
+      <reference file="Telerik.Windows.Controls.DataServices.dll" />
+      <reference file="Telerik.Windows.Controls.DataVisualization.dll" />
+      <reference file="Telerik.Windows.Controls.Diagrams.dll" />
+      <reference file="Telerik.Windows.Controls.Diagrams.Extensions.dll" />
+      <reference file="Telerik.Windows.Controls.Diagrams.Ribbon.dll" />
+      <reference file="Telerik.Windows.Controls.dll" />
+      <reference file="Telerik.Windows.Controls.Docking.dll" />
+      <reference file="Telerik.Windows.Controls.Expressions.dll" />
+      <reference file="Telerik.Windows.Controls.EntityFrameworkCore.dll" />
+      <reference file="Telerik.Windows.Controls.FileDialogs.dll" />
+      <reference file="Telerik.Windows.Controls.FixedDocumentViewers.dll" />
+      <reference file="Telerik.Windows.Controls.FixedDocumentViewersUI.dll" />
+      <reference file="Telerik.Windows.Controls.GanttView.dll" />
+      <reference file="Telerik.Windows.Controls.GridView.dll" />
+      <reference file="Telerik.Windows.Controls.GridView.Export.dll" />
+      <reference file="Telerik.Windows.Controls.GridView.SpreadsheetStreamingExport.dll" />
+      <reference file="Telerik.Windows.Controls.ImageEditor.dll" />
+      <reference file="Telerik.Windows.Controls.Input.dll" />
+      <reference file="Telerik.Windows.MediaFoundation.dll" />
+      <reference file="Telerik.Windows.Controls.Media.dll" />
+      <reference file="Telerik.Windows.Controls.Navigation.dll" />
+      <reference file="Telerik.Windows.Controls.Pivot.dll" />
+      <reference file="Telerik.Windows.Controls.PivotFieldList.dll" />
+      <reference file="Telerik.Windows.Controls.RibbonView.dll" />
+      <reference file="Telerik.Windows.Controls.RichTextBox.dll" />
+      <reference file="Telerik.Windows.Controls.ScheduleView.dll" />
+      <reference file="Telerik.Windows.Controls.Spreadsheet.dll" />
+      <reference file="Telerik.Windows.Controls.SpreadsheetUI.dll" />
+      <reference file="Telerik.Windows.Controls.SyntaxEditor.dll" />
+      <reference file="Telerik.Windows.Data.dll" />
+      <reference file="Telerik.Windows.Diagrams.Core.dll" />
+      <reference file="Telerik.Windows.Documents.CMapUtils.dll" />
+      <reference file="Telerik.Windows.Documents.Core.dll" />
+      <reference file="Telerik.Windows.Documents.DrawingML.dll" />
+      <reference file="Telerik.Windows.Documents.Fixed.dll" />
+      <reference file="Telerik.Windows.Documents.Flow.dll" />
+      <reference file="Telerik.Windows.Documents.Flow.FormatProviders.Pdf.dll" />
+      <reference file="Telerik.Windows.Documents.Flow.FormatProviders.Doc.dll" />
+      <reference file="Telerik.Windows.Documents.Proofing.dll" />
+      <reference file="Telerik.Windows.Documents.Spreadsheet.dll" />
+      <reference file="Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.dll" />
+      <reference file="Telerik.Windows.Documents.Spreadsheet.FormatProviders.Pdf.dll" />
+      <reference file="Telerik.Windows.Documents.Spreadsheet.FormatProviders.Xls.dll" />
+      <reference file="Telerik.Documents.SpreadsheetStreaming.dll" />
+      <reference file="Telerik.Windows.PersistenceFramework.dll" />
+      <reference file="Telerik.Windows.Scheduling.Core.dll" />
+      <reference file="Telerik.Windows.SyntaxEditor.Core.dll" />
+      <reference file="Telerik.Windows.Themes.Crystal.dll" />
+      <reference file="Telerik.Windows.Themes.Expression_Dark.dll" />
+      <reference file="Telerik.Windows.Themes.Fluent.dll" />
+      <reference file="Telerik.Windows.Themes.Green.dll" />
+      <reference file="Telerik.Windows.Themes.Material.dll" />
+      <reference file="Telerik.Windows.Themes.Office_Black.dll" />
+      <reference file="Telerik.Windows.Themes.Office_Blue.dll" />
+      <reference file="Telerik.Windows.Themes.Office_Silver.dll" />
+      <reference file="Telerik.Windows.Themes.Office2013.dll" />
+      <reference file="Telerik.Windows.Themes.Office2016.dll" />
+      <reference file="Telerik.Windows.Themes.Office2016Touch.dll" />
+      <reference file="Telerik.Windows.Themes.Office2019.dll" />
+      <reference file="Telerik.Windows.Themes.Summer.dll" />
+      <reference file="Telerik.Windows.Themes.Transparent.dll" />
+      <reference file="Telerik.Windows.Themes.Vista.dll" />
+      <reference file="Telerik.Windows.Themes.VisualStudio2013.dll" />
+      <reference file="Telerik.Windows.Themes.VisualStudio2019.dll" />
+      <reference file="Telerik.Windows.Themes.Windows7.dll" />
+      <reference file="Telerik.Windows.Themes.Windows8.dll" />
+      <reference file="Telerik.Windows.Themes.Windows8Touch.dll" />
+      <reference file="Telerik.Windows.Themes.Windows11.dll" />
+      <reference file="Telerik.Windows.Zip.dll" />
+      <reference file="Telerik.Windows.Zip.Extensions.dll" />
+      <reference file="Telerik.Windows.Controls.VirtualGrid.dll" />
+    </references>
+  </metadata>
+</package>
