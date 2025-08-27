@@ -7,6 +7,19 @@
         mc:Ignorable="d"
         Title="Custom Grid Control - Telerik" Height="600" Width="1200">
     <Grid>
-        <local:TelerikCustomDataGrid/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Control Panel -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10,10,10,0">
+            <Button Name="Test170ColumnsButton" Content="Test 170 Columns" Click="Test170ColumnsButton_Click" Margin="0,0,10,0"/>
+            <Button Name="Test5ColumnsButton" Content="Reset to 5 Columns" Click="Test5ColumnsButton_Click" Margin="0,0,10,0"/>
+            <TextBlock Name="StatusText" Text="Current: 5 columns" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="Blue"/>
+        </StackPanel>
+        
+        <!-- Dynamic Grid -->
+        <local:TelerikCustomDataGrid x:Name="MainGrid" Grid.Row="1" Margin="10"/>
     </Grid>
 </Window>

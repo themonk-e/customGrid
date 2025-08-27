@@ -498,67 +498,114 @@
             </Border>
         </DataTemplate>
 
-        <!-- Position Column Template -->
-        <DataTemplate x:Key="PositionCellTemplate">
-            <Border BorderBrush="LightGray" BorderThickness="1" Padding="5">
+        <!-- Dynamic Cell Template -->
+        <DataTemplate x:Key="DynamicCellTemplate">
+            <Border BorderBrush="LightGray" BorderThickness="1" Padding="3">
                 <Border.Background>
                     <MultiBinding Converter="{StaticResource CellStateToBackgroundConverter}">
-                        <Binding Path="Position.CellState"/>
-                        <Binding Path="Position.CellType"/>
+                        <Binding Path="CellState"/>
+                        <Binding Path="CellType"/>
                     </MultiBinding>
                 </Border.Background>
+                
+                <!-- Show different layouts for Editable vs ReadOnly -->
                 <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-
-                    <TextBlock Grid.Row="0" 
-                               Text="{Binding Position.OldValue}" 
-                               Style="{StaticResource PositionOldValueStyle}"
-                               Margin="2"
-                               Visibility="{Binding Position.CellType, Converter={StaticResource CellTypeToVisibilityConverter}, ConverterParameter=Editable}"/>
-                    
-                    <Grid Grid.Row="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
+                    <!-- Editable Cell Layout -->
+                    <Grid Visibility="{Binding CellType, Converter={StaticResource CellTypeToVisibilityConverter}, ConverterParameter=Editable}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
                         
-                        <TextBlock Grid.Column="0"
-                                   Text="{Binding Position.NewValue}" 
-                                   Style="{StaticResource PositionNewValueStyle}"
-                                   Margin="2"
-                                   VerticalAlignment="Center"/>
-
-                        <StackPanel Grid.Column="1" 
-                                    Orientation="Horizontal" 
-                                    VerticalAlignment="Center"
-                                    Margin="5,0,0,0"
-                                    Visibility="{Binding Position.CellType, Converter={StaticResource CellTypeToVisibilityConverter}, ConverterParameter=Editable}">
-                            <Button Name="AcceptButton" Content="✓" 
-                                    Style="{StaticResource RoundedButton}"
-                                    Background="#4CAF50" 
-                                    Foreground="White"
-                                    Click="AcceptButton_Click"
-                                    Tag="{Binding Position}"
-                                    Visibility="{Binding Position.CellState, Converter={StaticResource CellStateToVisibilityConverter}, ConverterParameter=ShowTick}"/>
-                            <Button Name="RejectButton" Content="✗" 
-                                    Style="{StaticResource RoundedButton}"
-                                    Background="#F44336" 
-                                    Foreground="White"
-                                    Click="RejectButton_Click"
-                                    Tag="{Binding Position}"
-                                    Visibility="{Binding Position.CellState, Converter={StaticResource CellStateToVisibilityConverter}, ConverterParameter=ShowX}"/>
-                        </StackPanel>
+                        <!-- Old Value (strikethrough) -->
+                        <TextBlock Grid.Row="0" 
+                                   Text="{Binding OldValue}" 
+                                   FontSize="10"
+                                   Margin="1">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="Gray"/>
+                                    <Setter Property="TextDecorations" Value="Strikethrough"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding CellState}" Value="Rejected">
+                                            <Setter Property="TextDecorations" Value="None"/>
+                                            <Setter Property="Foreground" Value="Black"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        
+                        <!-- New Value + Buttons Row -->
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <!-- New Value -->
+                            <TextBlock Grid.Column="0"
+                                       Text="{Binding NewValue}" 
+                                       FontSize="12"
+                                       VerticalAlignment="Center"
+                                       Margin="1">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="Black"/>
+                                        <Setter Property="TextDecorations" Value="None"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding CellState}" Value="Rejected">
+                                                <Setter Property="TextDecorations" Value="Strikethrough"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                            
+                            <!-- Accept/Reject Buttons -->
+                            <StackPanel Grid.Column="1" 
+                                        Orientation="Horizontal"
+                                        VerticalAlignment="Center">
+                                <Button Content="✓" 
+                                        Width="16" Height="16"
+                                        FontSize="10"
+                                        Background="#4CAF50" 
+                                        Foreground="White"
+                                        BorderThickness="0"
+                                        Margin="1,0,0,0"
+                                        Click="AcceptButton_Click"
+                                        Tag="{Binding}"
+                                        ToolTip="Accept"
+                                        Visibility="{Binding CellState, Converter={StaticResource CellStateToVisibilityConverter}, ConverterParameter=ShowTick}"/>
+                                <Button Content="✗" 
+                                        Width="16" Height="16"
+                                        FontSize="10"
+                                        Background="#F44336" 
+                                        Foreground="White"
+                                        BorderThickness="0"
+                                        Margin="1,0,0,0"
+                                        Click="RejectButton_Click"
+                                        Tag="{Binding}"
+                                        ToolTip="Reject"
+                                        Visibility="{Binding CellState, Converter={StaticResource CellStateToVisibilityConverter}, ConverterParameter=ShowX}"/>
+                            </StackPanel>
+                        </Grid>
                     </Grid>
+                    
+                    <!-- ReadOnly Cell Layout -->
+                    <TextBlock Visibility="{Binding CellType, Converter={StaticResource CellTypeToVisibilityConverter}, ConverterParameter=ReadOnly}"
+                               Text="{Binding NewValue}" 
+                               FontSize="12"
+                               Foreground="Black"
+                               VerticalAlignment="Center"
+                               Margin="2"/>
                 </Grid>
             </Border>
         </DataTemplate>
     </UserControl.Resources>
 
     <telerik:RadGridView Name="MainRadGridView" 
-                         ItemsSource="{Binding GridData}"
+                         ItemsSource="{Binding DynamicGridData}"
                          AutoGenerateColumns="False"
                          CanUserDeleteRows="False"
                          CanUserInsertRows="False"
@@ -567,16 +614,11 @@
                          IsFilteringAllowed="False"
                          EnableRowVirtualization="True"
                          EnableColumnVirtualization="True"
+                         ScrollMode="Deferred"
                          VirtualizingPanel.VirtualizationMode="Recycling"
                          VirtualizingPanel.ScrollUnit="Pixel"
                          ScrollViewer.CanContentScroll="True">
         
-        <telerik:RadGridView.Columns>
-            <telerik:GridViewDataColumn Header="Full Name" Width="180" UniqueName="Name" CellTemplate="{StaticResource NameCellTemplate}"/>
-            <telerik:GridViewDataColumn Header="Email Address" Width="200" UniqueName="Email" CellTemplate="{StaticResource EmailCellTemplate}"/>
-            <telerik:GridViewDataColumn Header="Home Address" Width="250" UniqueName="Address" CellTemplate="{StaticResource AddressCellTemplate}"/>
-            <telerik:GridViewDataColumn Header="Phone Number" Width="150" UniqueName="Phone" CellTemplate="{StaticResource PhoneCellTemplate}"/>
-            <telerik:GridViewDataColumn Header="Job Title" Width="150" UniqueName="Position" CellTemplate="{StaticResource PositionCellTemplate}"/>
-        </telerik:RadGridView.Columns>
+        <!-- Columns will be generated dynamically in code-behind -->
     </telerik:RadGridView>
 </UserControl>
