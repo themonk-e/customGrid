@@ -88,26 +88,47 @@ namespace CustomGridControl.Services
                     var selectedOrdinal = reader.GetOrdinal(selectedCol);
                     var selectedSourceOrdinal = reader.GetOrdinal(selectedSourceCol);
 
+                    var sourceValue = reader.IsDBNull(sourceOrdinal) ? string.Empty : reader.GetValue(sourceOrdinal)?.ToString() ?? string.Empty;
+                    var destValue = reader.IsDBNull(destOrdinal) ? string.Empty : reader.GetValue(destOrdinal)?.ToString() ?? string.Empty;
+                    var selectedValue = reader.IsDBNull(selectedOrdinal) ? string.Empty : reader.GetValue(selectedOrdinal)?.ToString() ?? string.Empty;
+                    var selectedSource = reader.IsDBNull(selectedSourceOrdinal) ? string.Empty : reader.GetString(selectedSourceOrdinal)?.Trim() ?? string.Empty;
+
                     var fieldComparison = new FieldComparison
                     {
                         FieldName = fieldName,
-                        SourceValue = reader.IsDBNull(sourceOrdinal) ? string.Empty : reader.GetValue(sourceOrdinal)?.ToString() ?? string.Empty,
-                        DestValue = reader.IsDBNull(destOrdinal) ? string.Empty : reader.GetValue(destOrdinal)?.ToString() ?? string.Empty,
-                        SelectedValue = reader.IsDBNull(selectedOrdinal) ? string.Empty : reader.GetValue(selectedOrdinal)?.ToString() ?? string.Empty,
-                        SelectedSource = reader.IsDBNull(selectedSourceOrdinal) ? string.Empty : reader.GetString(selectedSourceOrdinal)
+                        SourceValue = sourceValue,
+                        DestValue = destValue,
+                        SelectedValue = selectedValue,
+                        SelectedSource = selectedSource
                     };
 
                     // Determine cell state based on selected source
-                    if (!string.IsNullOrEmpty(fieldComparison.SelectedSource))
+                    // On initial load, ALL cells with differences should show as Pending (Yellow)
+                    // even if database has SelectedSource = "Source"
+                    // Only show Accepted/Rejected if there's a CONFIRMED user selection
+
+                    if (fieldComparison.HasDifference)
                     {
-                        fieldComparison.CellState = fieldComparison.SelectedSource == "Source" 
-                            ? CellState.Accepted 
-                            : CellState.Rejected;
+                        // Check if this is a confirmed user selection vs initial database default
+                        // If SelectedSource is set to something OTHER than the default "Source",
+                        // it means user actively rejected it
+                        if (selectedSource.Equals("Dest", StringComparison.OrdinalIgnoreCase))
+                        {
+                            // User explicitly rejected (clicked X)
+                            fieldComparison.CellState = CellState.Rejected;
+                        }
+                        else if (selectedSource.Equals("Accepted", StringComparison.OrdinalIgnoreCase))
+                        {
+                            // User explicitly accepted (clicked ✓) - use special marker
+                            fieldComparison.CellState = CellState.Accepted;
+                        }
+                        else
+                        {
+                            // Initial load or SelectedSource = "Source" (default) -> Pending (Yellow)
+                            fieldComparison.CellState = CellState.Pending;
+                        }
                     }
-                    else if (fieldComparison.HasDifference)
-                    {
-                        fieldComparison.CellState = CellState.Pending;
-                    }
+                    // else: No difference -> stays as default ReadOnly (handled by converter)
 
                     record.Fields[fieldName] = fieldComparison;
                 }

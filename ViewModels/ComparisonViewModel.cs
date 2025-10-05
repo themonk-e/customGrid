@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
+using CustomGridControl.Helpers;
 using CustomGridControl.Models;
 using CustomGridControl.Services;
 
@@ -17,6 +19,9 @@ namespace CustomGridControl.ViewModels
 
         public ObservableCollection<ComparisonRecord> ComparisonRecords { get; set; }
         public ObservableCollection<string> FieldNames { get; set; }
+
+        public ICommand AcceptCommand { get; }
+        public ICommand RejectCommand { get; }
 
         public bool IsLoading
         {
@@ -43,6 +48,25 @@ namespace CustomGridControl.ViewModels
             _databaseService = new DatabaseService(connectionString);
             ComparisonRecords = new ObservableCollection<ComparisonRecord>();
             FieldNames = new ObservableCollection<string>();
+
+            // Initialize commands
+            AcceptCommand = new RelayCommand(param =>
+            {
+                if (param is FieldComparison field)
+                {
+                    System.Diagnostics.Debug.WriteLine($"AcceptCommand executed for field: {field.FieldName}");
+                    AcceptChange(field);
+                }
+            });
+
+            RejectCommand = new RelayCommand(param =>
+            {
+                if (param is FieldComparison field)
+                {
+                    System.Diagnostics.Debug.WriteLine($"RejectCommand executed for field: {field.FieldName}");
+                    RejectChange(field);
+                }
+            });
         }
 
         public async Task LoadDataAsync(int? pipelineExecutionId = null)
@@ -107,7 +131,7 @@ namespace CustomGridControl.ViewModels
         public void AcceptChange(FieldComparison field)
         {
             field.SelectedValue = field.SourceValue;
-            field.SelectedSource = "Source";
+            field.SelectedSource = "Accepted"; // Use "Accepted" to distinguish from initial "Source"
             field.CellState = CellState.Accepted;
         }
 

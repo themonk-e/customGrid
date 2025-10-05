@@ -140,23 +140,49 @@ namespace CustomGridControl.Views
 
             // Set bindings BEFORE appending
             var bgConverter = this.Resources["CellStateToBackgroundConverter"] as IMultiValueConverter;
+            var oldValueConverter = this.Resources["CellStateToOldValueConverter"] as IMultiValueConverter;
+            var newValueConverter = this.Resources["CellStateToNewValueConverter"] as IMultiValueConverter;
+
+            // Background binding based on state and cell type
             var backgroundBinding = new MultiBinding { Converter = bgConverter };
             backgroundBinding.Bindings.Add(new Binding($"Fields[{fieldName}].CellState"));
             backgroundBinding.Bindings.Add(new Binding($"Fields[{fieldName}].HasDifference") { Converter = new HasDifferenceToCellTypeConverter() });
 
+            // Old value binding - shows Dest for Pending/Accepted, Source for Rejected
+            var oldValueBinding = new MultiBinding { Converter = oldValueConverter };
+            oldValueBinding.Bindings.Add(new Binding($"Fields[{fieldName}].CellState"));
+            oldValueBinding.Bindings.Add(new Binding($"Fields[{fieldName}].DestValue"));
+            oldValueBinding.Bindings.Add(new Binding($"Fields[{fieldName}].SourceValue"));
+
+            // New value binding - shows Source for Pending/Accepted, Dest for Rejected
+            var newValueBinding = new MultiBinding { Converter = newValueConverter };
+            newValueBinding.Bindings.Add(new Binding($"Fields[{fieldName}].CellState"));
+            newValueBinding.Bindings.Add(new Binding($"Fields[{fieldName}].DestValue"));
+            newValueBinding.Bindings.Add(new Binding($"Fields[{fieldName}].SourceValue"));
+
             var visibilityBinding = new Binding($"Fields[{fieldName}].HasDifference") { Converter = new System.Windows.Controls.BooleanToVisibilityConverter() };
 
             factory.SetBinding(Border.BackgroundProperty, backgroundBinding);
-            oldValueFactory.SetBinding(TextBlock.TextProperty, new Binding($"Fields[{fieldName}].DestValue"));
+            oldValueFactory.SetBinding(TextBlock.TextProperty, oldValueBinding);
             oldValueFactory.SetBinding(TextBlock.VisibilityProperty, visibilityBinding);
-            newValueFactory.SetBinding(TextBlock.TextProperty, new Binding($"Fields[{fieldName}].SourceValue"));
+            newValueFactory.SetBinding(TextBlock.TextProperty, newValueBinding);
             buttonsPanelFactory.SetBinding(StackPanel.VisibilityProperty, visibilityBinding);
-            acceptButtonFactory.SetBinding(Button.TagProperty, new Binding($"Fields[{fieldName}]"));
-            rejectButtonFactory.SetBinding(Button.TagProperty, new Binding($"Fields[{fieldName}]"));
+            // Bind CommandParameter to the FieldComparison object
+            acceptButtonFactory.SetBinding(Button.CommandParameterProperty, new Binding($"Fields[{fieldName}]"));
+            rejectButtonFactory.SetBinding(Button.CommandParameterProperty, new Binding($"Fields[{fieldName}]"));
 
-            // Add event handlers
-            acceptButtonFactory.AddHandler(Button.ClickEvent, new RoutedEventHandler(AcceptButton_Click));
-            rejectButtonFactory.AddHandler(Button.ClickEvent, new RoutedEventHandler(RejectButton_Click));
+            // Bind Command to ViewModel commands using RelativeSource to find the UserControl's DataContext
+            var acceptCommandBinding = new Binding("DataContext.AcceptCommand")
+            {
+                RelativeSource = new RelativeSource(RelativeSourceMode.FindAncestor, typeof(UserControl), 1)
+            };
+            var rejectCommandBinding = new Binding("DataContext.RejectCommand")
+            {
+                RelativeSource = new RelativeSource(RelativeSourceMode.FindAncestor, typeof(UserControl), 1)
+            };
+
+            acceptButtonFactory.SetBinding(Button.CommandProperty, acceptCommandBinding);
+            rejectButtonFactory.SetBinding(Button.CommandProperty, rejectCommandBinding);
 
             // NOW append children in the correct hierarchy
             factory.AppendChild(gridFactory);
@@ -183,21 +209,6 @@ namespace CustomGridControl.Views
             return System.Text.RegularExpressions.Regex.Replace(fieldName, "([a-z])([A-Z])", "$1 $2");
         }
 
-        private void AcceptButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button button && button.Tag is FieldComparison field && _viewModel != null)
-            {
-                _viewModel.AcceptChange(field);
-            }
-        }
-
-        private void RejectButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button button && button.Tag is FieldComparison field && _viewModel != null)
-            {
-                _viewModel.RejectChange(field);
-            }
-        }
 
         private async void LoadButton_Click(object sender, RoutedEventArgs e)
         {
