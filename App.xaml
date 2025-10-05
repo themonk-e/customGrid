@@ -15,6 +15,10 @@
                 <ResourceDictionary Source="/Telerik.Windows.Themes.Windows11;component/Themes/Telerik.Windows.Controls.Docking.xaml"/>
                 <ResourceDictionary Source="/Telerik.Windows.Themes.Windows11;component/Themes/Telerik.Windows.Controls.FileDialogs.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            
+            <!-- Register converters -->
+            <local:CellStateToBackgroundConverter x:Key="CellStateToBackgroundConverter"/>
+            <local:CellStateToVisibilityConverter x:Key="CellStateToVisibilityConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

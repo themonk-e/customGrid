@@ -31,11 +31,11 @@ namespace CustomGridControl
 
         private void GenerateSampleData()
         {
-            string[] firstNames = { "John", "Jane", "Bob", "Alice", "Charlie", "Diana", "Edward", "Fiona", "George", "Helen" };
-            string[] lastNames = { "Smith", "Doe", "Wilson", "Johnson", "Brown", "Davis", "Miller", "Garcia", "Martinez", "Anderson" };
-            string[] domains = { "gmail.com", "yahoo.com", "outlook.com", "company.com", "corp.com", "enterprise.com", "business.com" };
-            string[] streets = { "Main St", "Oak Ave", "Pine St", "Elm Dr", "Cedar Ln", "Maple Ave", "First St", "Second Ave", "Park Rd", "Hill St" };
-            string[] positions = { "Developer", "Manager", "Analyst", "Designer", "Engineer", "Architect", "Coordinator", "Specialist", "Director", "Consultant" };
+            string[] firstNames = ["John", "Jane", "Bob", "Alice", "Charlie", "Diana", "Edward", "Fiona", "George", "Helen"];
+            string[] lastNames = ["Smith", "Doe", "Wilson", "Johnson", "Brown", "Davis", "Miller", "Garcia", "Martinez", "Anderson"];
+            string[] domains = ["gmail.com", "yahoo.com", "outlook.com", "company.com", "corp.com", "enterprise.com", "business.com"];
+            string[] streets = ["Main St", "Oak Ave", "Pine St", "Elm Dr", "Cedar Ln", "Maple Ave", "First St", "Second Ave", "Park Rd", "Hill St"];
+            string[] positions = ["Developer", "Manager", "Analyst", "Designer", "Engineer", "Architect", "Coordinator", "Specialist", "Director", "Consultant"];
 
             var random = new Random();
 

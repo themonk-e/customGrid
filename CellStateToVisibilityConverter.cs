@@ -9,19 +9,9 @@ namespace CustomGridControl
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is CellState state && parameter is string param)
-            {
-                return (state, param) switch
-                {
-                    (CellState.Pending, "ShowTick") => Visibility.Visible,
-                    (CellState.Pending, "ShowX") => Visibility.Visible,
-                    (CellState.Accepted, "ShowTick") => Visibility.Collapsed,
-                    (CellState.Accepted, "ShowX") => Visibility.Visible,
-                    (CellState.Rejected, "ShowTick") => Visibility.Visible,
-                    (CellState.Rejected, "ShowX") => Visibility.Collapsed,
-                    _ => Visibility.Visible
-                };
-            }
+            // Both buttons should always be visible when there are differences
+            // This allows users to toggle their selection at any time before saving
+            // The HasDifference binding on the buttons panel controls overall visibility
             return Visibility.Visible;
         }
 

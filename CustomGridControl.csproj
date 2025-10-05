@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
     <PackageReference Include="Telerik.UI.for.Wpf.80" Version="2024.4.1213" />
   </ItemGroup>
 
